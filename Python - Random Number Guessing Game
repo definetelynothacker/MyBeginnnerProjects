@@ -1,0 +1,68 @@
+import random
+# number guessing game
+# framework: 1. user enters range
+#            2. program generates number within range
+#            3. user guesses number that program generates
+#            --if user wants, they can quit (enter -1)
+#            --user is allowed 5 guesses
+
+
+def prompt_user():
+    global prompt_range_start, prompt_range_end, random_int, num_guesses
+    prompt_range_start = int(input("Enter Start range: "))
+
+    if prompt_range_start <0:
+        print("You cannot enter a negative starting range")
+        prompt_range_start = int(input("Enter Start range: "))
+
+    prompt_range_end = int(input("Enter End range: "))
+
+    if prompt_range_end <0:
+        print("You cannot enter a negative ending range")
+        prompt_range_end = int(input("Enter End range: "))
+
+    random_int = random.randint(prompt_range_start, prompt_range_end)
+    num_guesses = 5
+
+
+def check_range():
+    global random_int, prompt_range_start, prompt_range_end, guess
+    if guess < prompt_range_start:
+        print("You cannot enter a value less than your selected range.")
+        guess = int(input("Guess the random Number: "))
+
+    if guess > prompt_range_end:
+        print("You cannot enter a value greater than your selected range")
+        guess = int(input("Guess the random Number: "))
+
+
+def start_game():
+    global prompt_range_start, prompt_range_end, random_int, num_guesses, guess
+    while num_guesses > 0:
+        guess = int(input("Guess the random Number: "))
+        check_range()
+        num_guesses -= 1
+        if guess == -1:
+            break
+        elif guess == random_int:
+            print(f"You guessed the correct number {guess}")
+            break
+        elif num_guesses > 0:
+            if num_guesses == 1:
+                print(f"Incorrect! you Guessed {guess}, {num_guesses} more attempt.")
+            elif num_guesses > 1:
+                print(f"Incorrect! you Guessed {guess}, {num_guesses} more attempts.")
+        else:
+            print(f"Incorrect! you Guessed {guess}\nCorrect Guess: {random_int}\nGAME OVER!!!")
+            continue_game = input("Do you want to play again? 'yes' or 'no': ")
+            if continue_game.lower() == 'yes':
+                prompt_user()
+                num_guesses = 5
+            elif continue_game.lower() == 'no':
+                break
+            else:
+                print("Please enter either 'yes' or 'no'")
+                continue_game = input("Do you want to play again? 'yes' or 'no': ")
+
+prompt_user()
+start_game()
