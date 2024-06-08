@@ -1,0 +1,72 @@
+import random
+choices_list = ["Rock", "Paper", "Scissors"]
+who_won = ["user", "pc", "tie", "invalid"]
+count_wins_user = 0
+count_wins_pc = 0
+count_ties = 0
+global user_choice_if_invalid
+user_choice_if_invalid = ""
+
+# get user input
+def prompt_user():
+    user_choice = input("Rock, Paper or Scissors? ")
+    return user_choice
+
+# get computer input
+def computer_choice():
+    pc_choice = random.choice(choices_list)
+    return pc_choice
+
+#check every option
+def check_win(user_choice, pc_choice):
+    global count_ties, count_wins_pc, count_wins_user
+    if(user_choice.lower() == pc_choice.lower()):
+        print("Tie!")
+        count_ties+=1
+        return who_won[2]
+    elif(user_choice.lower() == "rock" and pc_choice.lower() == "paper"):
+        print("Computer won")
+        count_wins_pc+=1
+        return who_won[2]
+    elif(user_choice.lower() == "rock" and pc_choice.lower() == "scissors"):
+        print("User won")
+        count_wins_user+=1
+        return who_won[1]
+    elif(user_choice.lower() == "paper" and pc_choice.lower() == "rock"):
+        print("User won")
+        count_wins_user+=1
+        return who_won[1]
+    elif(user_choice.lower() == "paper" and pc_choice.lower() == "scissors"):
+        print("Computer won")
+        count_wins_pc+=1
+        return who_won[2]
+    elif(user_choice.lower() == "scissors" and pc_choice.lower() == "paper"):
+        print("Computer won")
+        count_wins_pc+=1
+        return who_won[2]
+    elif(user_choice.lower() == "scissors" and pc_choice.lower() == "rock"):
+        print("User won")
+        count_wins_user+=1
+        return who_won[1]
+    elif(user_choice.lower() != "rock" or user_choice.lower() != "paper" or user_choice.lower() != "scissors"):
+        print("Please enter either Rock, Paper or Scissors")
+        return who_won[3]
+
+
+def run():
+    tries = 5
+    while(tries>0):
+        user = prompt_user()
+        if(user == "invalid"):
+            prompt_user()
+        pc = computer_choice()
+        won_round = check_win(user, pc)
+        tries-=1
+
+
+    print(f"User wins: {count_wins_user}")
+    print(f"Computer Wins: {count_wins_pc}")
+    print(f"Ties: {count_ties}")
+
+
+run()
