@@ -1,0 +1,166 @@
+import tkinter as tk
+import random
+
+window = tk.Tk()
+window.geometry("600x600")
+choices = ["X", "O"]
+player_choice = ""
+computer_choice = ""
+TURN = ["USER", "PC"]
+whos_turn = TURN[0]
+xwon = False
+owon = False
+empty_button_list = []
+
+def disable_all_buttons():
+    global button_list
+    for button in button_list:
+        button.config(state=tk.DISABLED)
+
+
+def who_won():
+    global button_list 
+    global empty_button_list
+    global xwon
+    global owon
+    
+    #straights-wins-x
+    if button_list[0].cget("text") == "X" and button_list[1].cget("text") == "X" and button_list[2].cget("text") == "X":
+        xwon = True
+        disable_all_buttons()
+    elif button_list[3].cget("text") == "X" and button_list[4].cget("text") == "X" and button_list[5].cget("text") == "X":
+        xwon = True
+        disable_all_buttons()
+    elif button_list[6].cget("text") == "X" and button_list[7].cget("text") == "X" and button_list[8].cget("text") == "X":
+        xwon = True
+        disable_all_buttons()
+    elif button_list[0].cget("text") == "X" and button_list[3].cget("text") == "X" and button_list[6].cget("text") == "X":
+        xwon = True
+        disable_all_buttons()
+    elif button_list[1].cget("text") == "X" and button_list[4].cget("text") == "X" and button_list[7].cget("text") == "X":
+        xwon = True
+        disable_all_buttons()
+    elif button_list[2].cget("text") == "X" and button_list[5].cget("text") == "X" and button_list[8].cget("text") == "X":
+        xwon = True
+        disable_all_buttons()
+    #straight-wins-x
+
+    #diagonal-wins-x
+    elif button_list[0].cget("text") == "X" and button_list[4].cget("text") == "X" and button_list[8].cget("text") == "X":
+        xwon = True
+        disable_all_buttons()
+    elif button_list[2].cget("text") == "X" and button_list[4].cget("text") == "X" and button_list[6].cget("text") == "X":
+        xwon = True
+        disable_all_buttons()
+    #diagonal-wins-x
+
+    #straights-wins-x
+    if button_list[0].cget("text") == "O" and button_list[1].cget("text") == "O" and button_list[2].cget("text") == "O":
+        owon = True
+        disable_all_buttons()
+    elif button_list[3].cget("text") == "O" and button_list[4].cget("text") == "O" and button_list[5].cget("text") == "O":
+        owon = True
+        disable_all_buttons()
+    elif button_list[6].cget("text") == "O" and button_list[7].cget("text") == "O" and button_list[8].cget("text") == "O":
+        owon = True
+        disable_all_buttons()
+    elif button_list[0].cget("text") == "O" and button_list[3].cget("text") == "O" and button_list[6].cget("text") == "O":
+        owon = True
+        disable_all_buttons()
+    elif button_list[1].cget("text") == "O" and button_list[4].cget("text") == "O" and button_list[7].cget("text") == "O":
+        owon = True
+        disable_all_buttons()
+    elif button_list[2].cget("text") == "O" and button_list[5].cget("text") == "O" and button_list[8].cget("text") == "O":
+        owon = True
+        disable_all_buttons()
+    #straight-wins-x
+
+    #diagonal-wins-x
+    elif button_list[0].cget("text") == "O" and button_list[4].cget("text") == "O" and button_list[8].cget("text") == "O":
+        owon = True
+        disable_all_buttons()
+    elif button_list[2].cget("text") == "O" and button_list[4].cget("text") == "O" and button_list[6].cget("text") == "O":
+        owon = True
+        disable_all_buttons()
+    #diagonal-wins-x
+
+    if xwon == True:
+        label.config(text="WINNER: X")
+    if owon == True:
+        label.config(text="WINNER: O")
+
+def selectChoice(string):
+    if whos_turn == TURN[1]:
+        return
+    global player_choice
+    global computer_choice
+    if string == "X":
+        player_choice = "X"
+        computer_choice = "O"
+    elif string == "O":
+        player_choice = "O"
+        computer_choice = "X"
+    choose_O.config(state=tk.DISABLED)
+    choose_X.config(state=tk.DISABLED)
+    print(player_choice)
+    print(computer_choice)
+
+def userPlay(button, choice):
+    global whos_turn
+    if whos_turn == TURN[0]:#player
+        button.config(text=choice, state=tk.DISABLED)
+    who_won()
+    whos_turn = TURN[1]# from player   --->   computer
+
+def computerPlay(): #will scroll through button list and store the buttons which are empty then will choose at random which one to use
+    global computer_choice
+    global whos_turn
+    global empty_button_list
+    empty_button_list = []
+    if whos_turn == TURN[0]:
+        return
+    button_list = [Fr1c1, Fr1c2, Fr1c3, Fr2c1, Fr2c2, Fr2c3, Fr3c1, Fr3c2, Fr3c3]
+    for button in button_list:
+        if button.cget("text") == "":
+            empty_button_list.append(button)
+    #choose random button from list
+    #if computer turn then update random button
+    random_button_choice = random.choice(empty_button_list)
+    if whos_turn == TURN[1]:#computer
+        random_button_choice.config(text=computer_choice, state=tk.DISABLED)
+    who_won()
+    whos_turn = TURN[0]# from computer   --->   player
+
+
+label = tk.Label(window, text="WINNER: ")
+label.grid(row = 0, column=1)
+
+choose_X = tk.Button(window, text="X", height=5, width=5, command=lambda: selectChoice("X"))
+choose_X.grid(row=1, column=1)
+choose_O = tk.Button(window, text="0", height=5, width=5, command=lambda: selectChoice("O"))
+choose_O.grid(row=1, column=2)
+
+Fr1c1 = tk.Button(window, height=5, width=5, command=lambda: [userPlay(Fr1c1, player_choice), computerPlay()])
+Fr1c1.grid(row=2, column=1, padx=5, pady=5)
+Fr1c2 = tk.Button(window, height=5, width=5, command=lambda: [userPlay(Fr1c2, player_choice), computerPlay()])
+Fr1c2.grid(row=2, column=2, padx=5, pady=5)
+Fr1c3 = tk.Button(window, height=5, width=5, command=lambda: [userPlay(Fr1c3, player_choice), computerPlay()])
+Fr1c3.grid(row=2, column=3, padx=5, pady=5)
+
+Fr2c1 = tk.Button(window, height=5, width=5, command=lambda: [userPlay(Fr2c1, player_choice), computerPlay()])
+Fr2c1.grid(row=3, column=1, padx=5, pady=5)
+Fr2c2 = tk.Button(window, height=5, width=5, command=lambda: [userPlay(Fr2c2, player_choice), computerPlay()])
+Fr2c2.grid(row=3, column=2, padx=5, pady=5)
+Fr2c3 = tk.Button(window, height=5, width=5, command=lambda: [userPlay(Fr2c3, player_choice), computerPlay()])
+Fr2c3.grid(row=3, column=3, padx=5, pady=5)
+
+Fr3c1 = tk.Button(window, height=5, width=5, command=lambda: [userPlay(Fr3c1, player_choice), computerPlay()])
+Fr3c1.grid(row=4, column=1, padx=5, pady=5)
+Fr3c2 = tk.Button(window, height=5, width=5, command=lambda: [userPlay(Fr3c2, player_choice), computerPlay()])
+Fr3c2.grid(row=4, column=2, padx=5, pady=10)
+Fr3c3 = tk.Button(window, height=5, width=5, command=lambda: [userPlay(Fr3c3, player_choice), computerPlay()])
+Fr3c3.grid(row=4, column=3, padx=5, pady=5)
+
+button_list = [Fr1c1, Fr1c2, Fr1c3, Fr2c1, Fr2c2, Fr2c3, Fr3c1, Fr3c2, Fr3c3]
+
+window.mainloop()
