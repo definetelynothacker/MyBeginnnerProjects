@@ -1,0 +1,76 @@
+import requests
+import json
+import tkinter
+
+#got major world cities list from chatgpt
+world_cities = [
+    "New York", "Los Angeles", "Chicago", "Houston", "Phoenix",
+    "London", "Paris", "Berlin", "Madrid", "Rome",
+    "Tokyo", "Osaka", "Beijing", "Shanghai", "Mumbai",
+    "Sydney", "Melbourne", "Brisbane", "Perth", "Adelaide",
+    "Cairo", "Lagos", "Johannesburg", "Nairobi", "Casablanca",
+    "Rio de Janeiro", "São Paulo", "Buenos Aires", "Lima", "Santiago",
+    "Moscow", "Saint Petersburg", "Istanbul", "Ankara", "Dubai",
+    "Bangkok", "Kuala Lumpur", "Singapore", "Jakarta", "Manila"
+]
+#got major world cities list from chatgpt
+
+#api
+api_key = '57c7110484a1442db00150128242107'
+
+#generate gui
+window = tkinter.Tk()
+window.title('window')
+
+#Create data
+temp_label = tkinter.Label(window, text="Temperature")
+temp_label.grid(row=0, column=0, padx=30, pady=20)
+temp_entry = tkinter.Entry(window, width=30)
+temp_entry.grid(row=0, column=1, padx=5, pady=20)
+
+wind_label = tkinter.Label(window, text="Wind Speed")
+wind_label.grid(row=1, column=0, padx=30, pady=20)
+wind_entry = tkinter.Entry(window, width=30)
+wind_entry.grid(row=1, column=1, padx=5, pady=20)
+
+#generate buttons
+button_width = 20
+button_height = 2
+row = 2
+column = 0
+for city in world_cities:
+    button = tkinter.Button(window, text=city, command=lambda c=city: get_weather_data(api_key, c), width=button_width, height=button_height)
+    button.grid(row = row, column = column, padx = 10)
+    column+=1
+    if column == 5:
+        column = 0
+        row+=1
+
+def get_weather_data(api_key, city):
+    url = f"http://api.weatherapi.com/v1/current.json?"
+    params = {
+        'key': api_key,
+        'q': city,
+        'api': 'no'
+    }
+    response = requests.get(url, params=params)
+
+    #check for a successfull response code = 200
+    if response.status_code == 200:
+        data = response.json()
+        temp_c = data["current"]["temp_c"]
+        wind_kph = data["current"]["wind_kph"]
+        text_temp = f"{temp_c}°C"
+        text_wind = f"{wind_kph} kph"
+        temp_entry.delete(0, tkinter.END)
+        temp_entry.insert(0, text_temp)
+        wind_entry.delete(0, tkinter.END)
+        wind_entry.insert(0, text_wind)
+    else:
+        text_failed = f"Failed to retreive data: {response.status_code}"
+        temp_entry.delete(0, tkinter.END)
+        temp_entry.insert(0, text_failed)
+        wind_entry.delete(0, tkinter.END)
+        wind_entry.insert(0, text_failed)
+
+window.mainloop()
