@@ -1,0 +1,98 @@
+# to do list
+
+# features
+# add task
+# delete task
+# edit task
+# mark as completed
+# due dates
+# priority levels
+# categorization
+# search and filter
+# recurring task
+
+id = 0
+task = {}#id : {"task": "" ,"status": "","priority": "", "due-date": ""}
+#task : completion_status : priority
+
+default_status = ["UnCompleted", "Completed"]
+default_priority = ["low", "medium", "high"]
+default_date = "01/01/9999"
+default_time = "8:00"
+
+#add task --> default values
+def add_task(task_to_add, task_status=0, task_priority=0, due_date=default_date, time=default_time):
+    global id
+    task[id] = {"task": task_to_add,"status": task_status, "priority": task_priority, "due-date": due_date, "time": time}
+    id+=1
+
+def search_task(task_to_search):
+    for task_id, tasks in task.items():
+        if tasks["task"] == task_to_search:
+            return task_id
+    return -1
+
+def delete_task(task_to_delete):
+    task_id = search_task(task_to_delete)
+    if task_id!=-1:
+        del task[task_id]
+        print(f"Task: '{task}' deleted successfully")
+    else:
+        print("ERROR task not found.")
+        exit()
+
+def mark_completed(task_to_mark_completed):
+    global task
+    task_id = search_task(task_to_mark_completed)
+    if task_id!=-1:
+        task[task_id]["status"] = default_status[1]
+    else:
+        print("ERROR task not found.")
+        exit()
+
+def change_priority(task_to_search, new_priority):
+    global task
+    task_id = search_task(task_to_search)
+    if task_id!=-1:
+        task[task_id]["priority"] = new_priority
+    else:
+        print("ERROR task not found.")
+        exit()
+
+def change_date(task_to_search, new_date):
+    global task
+    task_id = search_task(task_to_search)
+    if task_id!=-1:
+        task[task_id]["due-date"] = new_date
+    else:
+        print("ERROR task not found.")
+        exit()
+
+def change_time(task_to_search, new_time):
+    global task
+    task_id = search_task(task_to_search)
+    if task_id!=-1:
+        task[task_id]["time"] = new_time
+    else:
+        print("ERROR task not found.")
+        exit()
+
+def display_task():
+    print(task)
+
+add_task("Wake up", 0, 2, "01/01/2023", "07:00")
+add_task("Exercise", 0, 1, "01/01/2023", "07:30")
+add_task("Breakfast", 0, 1, "01/01/2023", "08:00")
+add_task("Go to work", 0, 2, "01/01/2023", "09:00")
+add_task("Lunch", 0, 1, "01/01/2023", "12:00")
+add_task("Continue work", 0, 2, "01/01/2023", "13:00")
+add_task("Go home", 0, 2, "01/01/2023", "17:00")
+add_task("Dinner", 0, 1, "01/01/2023", "19:00")
+add_task("Relax/TV", 0, 1, "01/01/2023", "20:00")
+add_task("Sleep", 0, 2, "01/01/2023", "22:00")
+delete_task("Lunch")
+mark_completed("Continue work")
+change_priority("Exercise", "medium")
+change_date("Go home", "01/02/2023")
+change_time("Sleep", "23:00")
+display_task()
