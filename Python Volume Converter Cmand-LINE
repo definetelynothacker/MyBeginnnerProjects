@@ -1,0 +1,77 @@
+#converter
+
+volume_constants = {"US-gallon": 0.00378541,
+                    "US-quart": 0.000946353,
+                    "US-pint": 0.000473176,
+                    "US-cup": 0.00024,
+                    "US-ounce": 0.000029574,
+                    "US-tablespoon": 0.000014787,
+                    "US-teaspoon": 0.0000049289,
+                    "ml": 0.000001,
+                    "cm³": 0.000001,
+                    "l": 0.001,
+                    "m³": 1, 
+                    "gallon": 0.00454609,
+                    "quart": 0.00113652,
+                    "pint": 0.00568261,
+                    "cup": 0.00284131,
+                    "ounce": 0.000028413,
+                    "tablespoon": 0.00001758,
+                    "teaspoon": 0.0000059194,
+                    "foot": 0.0283168,
+                    "inch": 0.000016387}
+
+def volume_converter(amount_from, convert_from, convert_to):
+    
+    if convert_from in volume_constants and convert_to in volume_constants:
+        c_from = volume_constants[convert_from]
+        c_to = volume_constants[convert_to]
+    else:
+        result = -1
+        print("Error conversion not found.")
+        return result
+
+    amt_from_to_m = amount_from * c_from
+    result = amt_from_to_m * (1/c_to)
+    return result
+
+
+for unit in volume_constants:
+    print(unit, end=", ")
+
+
+def prompt():
+    volume_input_amt = input("Enter amount: ")
+    if volume_input_amt == "end":
+        print("Converter Stopped!")
+        exit(0)
+
+    volume_input_amt = float(volume_input_amt)
+    volume_input_f = input("Enter Unit from: ")
+    volume_input_t = input("Enter Unit to: ")
+
+    return volume_input_amt, volume_input_f, volume_input_t
+
+
+def error_handling(volume_input_amt):
+    try:
+        return float(volume_input_amt)
+    except ValueError:
+        print("Error: Please a valid number")
+        return None
+
+
+while True:  
+
+    volume_input_amt, volume_input_f, volume_input_t = prompt()
+
+    if volume_input_amt == "end":
+        print("Ended")
+        exit(0)
+
+    volume_input_amt = error_handling(volume_input_amt)    
+
+    vol = volume_converter(volume_input_amt, volume_input_f, volume_input_t)
+    print(f"Volume from {volume_input_amt}{volume_input_f} to {volume_input_t} = {vol}{volume_input_t}")
+
+        
