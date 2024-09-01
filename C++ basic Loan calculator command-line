@@ -1,0 +1,120 @@
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <cmath>
+
+using namespace std;
+
+string reverse_string(string str)
+{
+    reverse(str.begin(), str.end());
+    return str;
+}
+
+string format_number(double number)
+{
+    string str = to_string(number);
+    str = reverse_string(str);
+    int digits = 0;
+    bool reached_decimal = false;
+    for (int i = 0; i < str.size(); i++)
+    {
+        if (reached_decimal)
+            digits++;
+
+        if (digits % 4 == 0 && reached_decimal)
+        {
+            str.insert(i, ",");
+            digits = 0;
+        }
+        if (str[i] == '.')
+        {
+            reached_decimal = true;
+        }
+    }
+
+    string reversed = reverse_string(str);
+    return reversed;
+}
+
+void check_entered_values(double &amount, double &interest_rate, int &months, int &years)
+{
+    while (amount <= 0)
+    {
+        cout << "Amount should be greater than zero: ";
+        cin >> amount;
+    }
+    while (interest_rate <= 0)
+    {
+        cout << "Interest rate should be greater than zero: ";
+        cin >> interest_rate;
+    }
+    while (years <= 0 && months <= 0)
+    {
+        cout << "Both years and months can't be zero or negative: ";
+        cin >> years;
+        if (years <= 0)
+        {
+            cout << "Enter valid months: ";
+            cin >> months;
+        }
+    }
+}
+
+void basic_loan_calculator(double amount, double interest_rate, int months, int years)
+{
+    double monthly_payment;
+    int period;
+    interest_rate /= 12 * 100;
+    // period-global
+
+    if (years <= 0)
+        period = months;
+
+    else
+        period = (years * 12) + months;
+
+    monthly_payment = (amount * interest_rate * pow((1 + interest_rate), period)) / (pow((1 + interest_rate), period) - 1);
+    double total_payments = monthly_payment * period;
+    double total_interest = total_payments - amount;
+    string str_interest = format_number(total_interest);
+    string str_payments_m = format_number(monthly_payment);
+    string str_payments_t = format_number(total_payments);
+
+    cout << "Results: " << endl;
+    cout << "Payment Every Month: $" << str_payments_m << endl;
+    cout << "Total of " << period << " Payments: $" << str_payments_t << endl;
+    cout << "Total Interest: $" << str_interest << endl;
+}
+
+void prompt(){
+    double amount, rate;
+    int months,years;
+    cout << "Enter -1 to END" << endl;
+    cout << "Enter Loan Amount: ";
+    cin >> amount;
+    cout << "Enter interest rate: ";
+    cin >> rate;
+    cout << "Enter Period Y-->M: ";
+    cin >> years >> months;
+
+    while(amount!=-1){
+        check_entered_values(amount, rate, months, years);
+        basic_loan_calculator(amount, rate, months, years);
+
+        cout << "Enter -1 to END" << endl;
+        cout << "Enter Loan Amount: ";
+        cin >> amount;
+        cout << "Enter interest rate: ";
+        cin >> rate;
+        cout << "Enter Period Y-->M: ";
+        cin >> years >> months;
+    }
+}
+
+
+int main()
+{
+
+    prompt();
+}
