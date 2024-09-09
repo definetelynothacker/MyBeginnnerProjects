@@ -1,0 +1,65 @@
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import kotlin.random.Random
+
+data class Transaction(val amount: Double, val type: String, val date: LocalDate)
+
+var totalIncome: Double = 0.0
+var transactionsList: MutableList<Transaction> = mutableListOf()
+
+fun recordTransaction(amount: Double, type: String) {
+    val currentDate: LocalDate = LocalDate.now()
+    transactionsList.add(Transaction(amount, type, currentDate))
+}
+
+fun addIncome(income: Double) {
+    totalIncome += income
+    recordTransaction(income, "Income")
+}
+
+fun recordExpense(expense: Double) {
+    totalIncome -= expense
+    recordTransaction(expense, "Expense")
+}
+
+fun dateInRange(date: LocalDate, dateFrom: LocalDate, dateTo: LocalDate): Boolean {
+    return (date.isAfter(dateFrom.minusDays(1)) && date.isBefore(dateTo.plusDays(1)))
+}
+
+fun generateReport(dateFrom: LocalDate, dateTo: LocalDate) {
+    for (transaction in transactionsList) {
+        val transactionDate: LocalDate = transaction.date
+        if (dateInRange(transactionDate, dateFrom, dateTo)) {
+            println("Transaction Type: ${transaction.type}, Amount: ${transaction.amount}, Date: ${transaction.date}")
+        }
+    }
+}
+
+fun addData() {
+    val types = listOf("Income", "Expense")
+    val currentDate: LocalDate = LocalDate.now()
+
+    val numTransactions = Random.nextInt(5, 21)
+
+    for (i in 1..numTransactions) {
+        val amount = Random.nextDouble(10.0, 1000.0)
+
+        val type = types.random()
+
+        val daysOffset = Random.nextLong(30, 60)
+        val transactionDate = if (Random.nextBoolean()) {
+            currentDate.plusDays(daysOffset)
+        } else {
+            currentDate.minusDays(daysOffset)
+        }
+        recordTransaction(amount, type)
+    }
+}
+
+fun main() {
+    addData()
+    
+    val dateFrom = LocalDate.of(2024, 1, 1)
+    val dateTo = LocalDate.of(2024, 12, 31)
+    generateReport(dateFrom, dateTo)
+}
