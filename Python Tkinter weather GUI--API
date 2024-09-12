@@ -16,7 +16,7 @@ world_cities = [
 #got major world cities list from chatgpt
 
 #api
-api_key = '57c7110484a1442db00150128242107'
+api_key = '...'
 
 #generate gui
 window = tkinter.Tk()
